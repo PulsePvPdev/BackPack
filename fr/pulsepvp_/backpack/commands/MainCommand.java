@@ -19,7 +19,9 @@ public class MainCommand implements CommandExecutor {
 		if(args.length == 1 && args[0].equalsIgnoreCase("get")) {
 	        net.minecraft.server.v1_15_R1.ItemStack stack = CraftItemStack.asNMSCopy(new ItemStack(Material.CHEST));
 	        NBTTagCompound tag = stack.getTag() != null ? stack.getTag() : new NBTTagCompound();
-	        tag.setInt("inventory_id", Functions.getNewBPId());
+	        int inventory_id = Functions.getNewBPId();
+	        tag.setInt("inventory_id", inventory_id);
+	        Functions.createBPinDB(inventory_id);
 	        stack.setTag(tag);
 	        ItemStack back_pack=CraftItemStack.asCraftMirror(stack);
 	        ItemMeta back_pack_meta = back_pack.getItemMeta();

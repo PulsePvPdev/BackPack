@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.bukkit.Bukkit;
 import org.bukkit.inventory.Inventory;
 
 import pulsepvp_.backpack.BackPack;
@@ -34,16 +35,31 @@ public class Functions {
 		} catch (SQLException e) {}
 		return Serialization.fromBase64(inventory_serialized);
 	}
+	public static void createBPinDB(int inventory_id) {
+		
+		Inventory inv = Bukkit.createInventory(null, 9, "BackPack =)");
+		try {
+			PreparedStatement statement = BackPack.getDatabase().prepareStatement("INSERT INTO backpack_save VALUES (?,?)");
+			statement.setInt(1, inventory_id);
+			statement.setString(2, Serialization.toBase64(inv));
+			statement.executeUpdate();
+			statement.close();
+		} catch (SQLException e) {
+			BackPack.getConsole().sendMessage("ERREUR SQL=" + e);
+		}
+	}
 	public static int getNewBPId() {
 		try {
 			PreparedStatement statement = BackPack.getDatabase().prepareStatement("SELECT MAX(inventory_id) as max FROM backpack_save");
 			ResultSet resultSet;
 			resultSet = statement.executeQuery();
-			statement.close();
 			if(resultSet.next()) {
 				return resultSet.getInt("max")+1;
 			}
-		} catch (SQLException e) {}
+			statement.close();
+		} catch (SQLException e) {
+			BackPack.getConsole().sendMessage("ERREUR SQL=" + e);
+		}
 			return 0;
 	}
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -16,8 +17,10 @@ import pulsepvp_.backpack.utils.Functions;
 public class PlayerInteract implements Listener {
 	@EventHandler
 	public void onClick(PlayerInteractEvent e) {
-			if (e.getAction().equals(Action.LEFT_CLICK_AIR) || e.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
-				if(e.getItem().equals(Material.CHEST) && e.getItem().getItemMeta().getDisplayName().contentEquals("BACKPACK")) {
+			if (e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_AIR)) {
+				Player player = e.getPlayer();
+				if(player.getInventory().getItemInMainHand().getType() == Material.CHEST) {
+					e.getPlayer().sendMessage("TEST");
 					net.minecraft.server.v1_15_R1.ItemStack back_pack_craft = CraftItemStack.asNMSCopy(e.getItem());
 					 NBTTagCompound tag = back_pack_craft.getTag();
 					 int inventory_id = tag.getInt("inventory_id");
@@ -26,6 +29,7 @@ public class PlayerInteract implements Listener {
 						e.getPlayer().openInventory(inventory);
 					} catch (IOException e1) {
 						e.getPlayer().sendMessage("ERREUR SQL...");
+						player.sendMessage("Erreur : " + e1);
 					}
 				}
 			}
