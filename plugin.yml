@@ -1,0 +1,11 @@
+name: BackPack
+author: PulsePvP_
+main: pulsepvp_.backpack.BackPack
+version: 1.0
+description: Plugin de test pour WorldCube
+prefix: null
+api-version: 1.15
+commands:
+   bp:
+      description: Main command
+      usage: /bp
