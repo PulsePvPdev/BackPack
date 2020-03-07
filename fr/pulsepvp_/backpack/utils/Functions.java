@@ -6,7 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import pulsepvp_.backpack.BackPack;
 
@@ -57,6 +62,26 @@ public class Functions {
 			BackPack.getConsole().sendMessage("ERREUR SQL=" + e);
 		}
 	}
+	 public static void addNBTData(ItemStack item, String name, String value){
+	        try {
+	            Object nbt = item.getClass().getDeclaredField("tag");
+	            Class<?> NBTTagCompound = BackPack.getNMSClass("NBTTagCompound");
+	            NBTTagCompound.getMethod("set", name.getClass(), value.getClass()).invoke(name, value);
+	            nbt.getClass().getMethod("setTag", NBTTagCompound).invoke(NBTTagCompound);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	 }
+	 public static String getNBTData(ItemStack item, String name){
+	        try {
+	            Object nbt = item.getClass().getDeclaredField("tag");
+	            Class<?> NBTTagCompound = BackPack.getNMSClass("NBTTagCompound");
+	            NBTTagCompound.getMethod("get", name.getClass()).invoke(name);
+	            nbt.getClass().getMethod("getInt", NBTTagCompound, name).invoke(NBTTagCompound, name);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	 }
 	public static int getNewBPId() {
 		try {
 			PreparedStatement statement = BackPack.getDatabase().prepareStatement("SELECT MAX(inventory_id) as max FROM backpack_save");

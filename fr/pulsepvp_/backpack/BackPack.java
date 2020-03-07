@@ -39,5 +39,8 @@ public class BackPack extends JavaPlugin{
 	public static Connection getDatabase() {
 	      return databaseManager.getDatabase();
 	   }
+	public static Class<?> getNMSClass(String name) throws ClassNotFoundException {
+	       return Class.forName("net.minecraft.server." + Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3] + "." + name);
+	   }
 
 }
